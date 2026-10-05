@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>四邊形的關係 - 香港小學數學</title>
+  <!-- 引入 html2canvas 程式庫以支援報告圖片下載 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    /* 全局樣式與 iPad 觸控優化 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #f0f4f8;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      touch-action: manipulation;
+    }
+
+    /* 頂部導覽列 */
+    header {
+      background-color: #2b5278;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .lang-btn {
+      background-color: transparent;
+      border: 1px solid white;
+      color: white;
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s;
+      min-height: 44px;
+    }
+
+    .lang-btn:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .page-title {
+      text-align: center;
+      font-size: 1.8rem;
+      color: #2b5278;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+
+    /* 首頁選單網格 */
+    .menu-grid {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 35px 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 2px solid transparent;
+      min-height: 140px;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .card:hover, .card:active {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      border-color: #4a90e2;
+    }
+
+    .card h3 {
+      font-size: 1.5rem;
+      color: #1a365d;
+      margin-bottom: 15px;
+    }
+
+    .card p {
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* 練習界面 */
+    .quiz-wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .back-nav-btn {
+      background: white;
+      border: 1px solid #cbd5e0;
+      color: #4a5568;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+      transition: all 0.2s;
+      min-height: 44px;
+    }
+
+    .back-nav-btn:hover {
+      background-color: #edf2f7;
+      color: #2b6cb0;
+    }
+
+    .quiz-card {
+      background: white;
+      border-radius: 16px;
+      padding: 35px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      width: 100%;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #edf2f7;
+      padding-bottom: 12px;
+    }
+
+    .quiz-progress {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #3182ce;
+    }
+
+    .unit-tag {
+      background-color: #ebf8ff;
+      color: #2b6cb0;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      font-weight: bold;
+    }
+
+    .statement-box {
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px 0;
+      color: #2d3748;
+      line-height: 1.6;
+      background: #f7fafc;
+      padding: 22px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* 選擇按鈕 (✓ / ✗) */
+    .tf-options {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .tf-btn {
+      flex: 1;
+      max-width: 220px;
+      padding: 16px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border: 2px solid #cbd5e0;
+      border-radius: 12px;
+      background: white;
+      color: #2d3748;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 64px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+
+    .tf-btn:hover:not(:disabled) {
+      border-color: #3182ce;
+      background-color: #f8fafc;
+    }
+
+    /* 答對樣式：保持綠色 */
+    .tf-btn.btn-correct {
+      background-color: #38a169 !important;
+      border-color: #2f855a !important;
+      color: white !important;
+      box-shadow: 0 4px 10px rgba(56, 161, 105, 0.3);
+    }
+
+    /* 答錯短暫樣式：變紅 */
+    .tf-btn.btn-wrong {
+      background-color: #e53e3e !important;
+      border-color: #c53030 !important;
+      color: white !important;
+      box-shadow: 0 4px 10px rgba(229, 62, 62, 0.3);
+    }
+
+    /* 搖一搖動畫 */
+    .shake-anim {
+      animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-2px, 0, 0); }
+      20%, 80% { transform: translate3d(4px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+      40%, 60% { transform: translate3d(8px, 0, 0); }
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 14px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      text-align: center;
+      min-height: 48px;
+    }
+
+    .btn:active {
+      transform: scale(0.99);
+    }
+
+    .btn-success { background-color: #38a169; color: white; }
+    .btn-success:hover { background-color: #2f855a; }
+
+    .btn-purple { background-color: #8e44ad; color: white; margin-bottom: 10px; }
+    .btn-purple:hover { background-color: #7d3c98; }
+
+    .btn-sky { background-color: #38bdf8; color: white; margin-bottom: 10px; }
+    .btn-sky:hover { background-color: #0284c7; }
+
+    .btn-gray { background-color: #7f8c8d; color: white; }
+    .btn-gray:hover { background-color: #636e72; }
+
+    /* 解題思路卡片 */
+    .solution-card {
+      background-color: #ffffff;
+      border: 2px dashed #4a90e2;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    .solution-header {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #2b6cb0;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .venn-diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .venn-title {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: #4a5568;
+      margin-bottom: 10px;
+    }
+
+    .solution-text-list {
+      font-size: 0.98rem;
+      line-height: 1.7;
+      color: #2d3748;
+      margin-top: 12px;
+    }
+
+    .solution-text-list li {
+      margin-bottom: 8px;
+      list-style: none;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .solution-text-list li::before {
+      content: "•";
+      position: absolute;
+      left: 5px;
+      color: #3182ce;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .key-rules {
+      background: #ebf8ff;
+      border-left: 4px solid #3182ce;
+      padding: 12px 15px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 15px;
+      font-size: 0.95rem;
+      color: #2b6cb0;
+    }
+
+    /* 分析報告界面 */
+    .report-card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      max-width: 650px;
+      margin: 0 auto;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .report-title {
+      text-align: center;
+      color: #3182ce;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .report-section {
+      background-color: #f8fafc;
+      border-radius: 8px;
+      padding: 12px 20px;
+      margin-bottom: 15px;
+    }
+
+    .report-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      color: #4a5568;
+      font-size: 0.95rem;
+    }
+
+    .report-row.dashed {
+      border-bottom: 1px dashed #cbd5e0;
+    }
+
+    .report-val { font-weight: bold; }
+    .val-green { color: #276749; }
+    .val-red { color: #9b2c2c; }
+    .val-blue { color: #0284c7; }
+
+    .section-label {
+      font-weight: bold;
+      color: #2d3748;
+      margin: 15px 0 10px 0;
+      font-size: 1rem;
+    }
+
+    .list-box {
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .list-box.correct-bg { background-color: #f7fafc; }
+    .list-box.wrong-bg { background-color: #f7fafc; }
+
+    .list-title {
+      font-weight: bold;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .item-card-correct {
+      background: #f0fff4;
+      border: 1px solid #c6f6d5;
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+      color: #22543d;
+      font-weight: 500;
+    }
+
+    .item-card-wrong {
+      background: #fff5f5;
+      border: 1px solid #fed7d7;
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+      color: #9b2c2c;
+      font-weight: 500;
+    }
+
+    .item-card-correct:last-child, .item-card-wrong:last-child {
+      margin-bottom: 0;
+    }
+
+    .item-q-title { font-weight: bold; flex: 1; }
+    .item-ans-text { font-weight: bold; margin-left: 10px; }
+
+    /* Modal 彈窗 */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .modal-box h3 { margin-bottom: 12px; color: #2b5278; }
+    .modal-box p { margin-bottom: 20px; color: #4a5568; }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .hidden { display: none !important; }
+
+    /* SVG 溫氏圖樣式 */
+    .venn-svg {
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .quiz-card { padding: 25px 20px; }
+      .statement-box { font-size: 1.2rem; }
+      .item-card-correct, .item-card-wrong {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+      .item-ans-text { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header>
+    <h1 id="header-title">四邊形的關係</h1>
+    <button id="lang-toggle-btn" class="lang-btn" onclick="toggleLanguage()">English</button>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <!-- 1. 首頁選擇界面 -->
+      <div id="page-home">
+        <h2 id="home-subtitle" class="page-title">請選擇學習單元</h2>
+        <div class="menu-grid">
+          <div class="card" onclick="startQuiz('unit1')">
+            <h3 id="unit1-title">單元一：是對是錯?</h3>
+            <p id="desc-opt1">判斷有關正方形、長方形、菱形、平行四邊形及梯形等四邊形性質與包含關係的描述是否正確。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 答題界面 -->
+      <div id="page-quiz" class="hidden">
+        <div class="quiz-wrapper">
+          <button class="back-nav-btn" onclick="askReturnHome()">
+            <span id="lbl-back-btn">← 返回階段選擇</span>
+          </button>
+
+          <div class="quiz-card">
+            <div class="quiz-header">
+              <span id="quiz-mode-name" class="unit-tag">是對是錯?</span>
+              <span id="quiz-progress-text" class="quiz-progress">題目 1 / 10</span>
+            </div>
+
+            <div class="statement-box" id="statement-text">
+              載入題目中...
+            </div>
+
+            <!-- 選擇按鈕 (✓ 正確 / ✗ 不正確) - 點擊即提交答案 -->
+            <div class="tf-options">
+              <button type="button" class="tf-btn" id="btn-choice-true" onclick="handleDirectAnswer(true)">
+                <span>✓</span> <span id="label-true">正確</span>
+              </button>
+              <button type="button" class="tf-btn" id="btn-choice-false" onclick="handleDirectAnswer(false)">
+                <span>✗</span> <span id="label-false">不正確</span>
+              </button>
+            </div>
+
+            <!-- 題解與下一題控制 -->
+            <div id="solution-area" class="hidden"></div>
+
+            <div id="action-area" style="margin-top: 20px;">
+              <button id="btn-next" class="btn btn-success hidden" onclick="nextQuestion()">下一題 ➔</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. 表現分析報告 -->
+      <div id="page-report" class="hidden">
+        <div id="report-card-to-capture" class="report-card">
+          <h2 id="report-main-title" class="report-title">練習完成！表現分析報告</h2>
+
+          <div class="report-section">
+            <div class="report-row dashed">
+              <span id="lbl-start-time">開始時間：</span>
+              <span id="val-start-time" class="report-val">--</span>
+            </div>
+            <div class="report-row dashed">
+              <span id="lbl-end-time">完成時間：</span>
+              <span id="val-end-time" class="report-val">--</span>
+            </div>
+            <div class="report-row">
+              <span id="lbl-duration">總用時：</span>
+              <span id="val-duration" class="report-val val-blue">--</span>
+            </div>
+          </div>
+
+          <div class="report-section">
+            <div class="report-row dashed">
+              <span id="lbl-total-correct">總答對題數：</span>
+              <span id="val-correct-count" class="report-val val-green">0 / 10</span>
+            </div>
+            <div class="report-row">
+              <span id="lbl-accuracy">整體正確率：</span>
+              <span id="val-accuracy" class="report-val">0%</span>
+            </div>
+          </div>
+
+          <div class="section-label" id="lbl-mastery-title">各主題掌握度分析</div>
+          <div class="report-section">
+            <div class="report-row">
+              <span id="report-unit-name">1. 四邊形的關係 (是對是錯?)</span>
+              <span id="val-unit-mastery" class="report-val">0 / 10 (0%)</span>
+            </div>
+          </div>
+
+          <div class="list-box correct-bg">
+            <div class="list-title val-green">
+              <span>☑</span> <span id="lbl-correct-title">答對的題目</span>
+            </div>
+            <div id="correct-list-container"></div>
+          </div>
+
+          <div class="list-box wrong-bg">
+            <div class="list-title val-red">
+              <span>✕</span> <span id="lbl-wrong-title">答錯 / 需要協助的題目</span>
+            </div>
+            <div id="wrong-list-container"></div>
+          </div>
+
+          <!-- 按鈕選單 -->
+          <div data-html2canvas-ignore="true" style="margin-top: 20px;">
+            <button class="btn btn-purple" onclick="downloadReportImage()"><span id="lbl-btn-download">💾 下載報告圖片</span></button>
+            <button class="btn btn-sky" onclick="retryPractice()"><span id="lbl-btn-retry">🔄 我想再試</span></button>
+            <button class="btn btn-gray" onclick="goHome()"><span id="lbl-btn-home">回到主頁重新選擇</span></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- 通用 Modal -->
+  <div id="custom-modal" class="modal-overlay">
+    <div class="modal-box">
+      <h3 id="modal-title">標題</h3>
+      <p id="modal-msg">內容訊息</p>
+      <div class="modal-buttons">
+        <button id="modal-cancel-btn" class="btn btn-gray" style="flex: 1;" onclick="closeModal()">取消</button>
+        <button id="modal-confirm-btn" class="btn btn-primary" style="flex: 1;" onclick="confirmModalAction()">確定</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 題庫資料：涵蓋香港小學四邊形性質與包含關係（已完全移除對角線相關題目）
+    const questionBank = [
+      {
+        id: 1,
+        statement_zh: "正方形的對邊長度相等。",
+        statement_en: "The opposite sides of a square are equal in length.",
+        answer: true,
+        type: "parallelogram_sub",
+        explanation_zh: "正方形 4 條邊都相等，因此它的對邊長度必然相等，且互相平行。所有正方形都是平行四邊形。",
+        explanation_en: "All 4 sides of a square are equal, so its opposite sides are naturally equal and parallel."
+      },
+      {
+        id: 2,
+        statement_zh: "長方形具備了正方形的性質。",
+        statement_en: "A rectangle possesses all the properties of a square.",
+        answer: false,
+        type: "rect_rhombus_venn",
+        explanation_zh: "一般的平行四邊形或長方形不一定有 4 邊相等。正方形要求「4條邊皆相等」，而一般長方形只有「對邊相等」，4條邊不一定相等，所以長方形不具備正方形的所有性質。",
+        explanation_en: "A square requires all 4 sides to be equal, whereas a general rectangle only has equal opposite sides."
+      },
+      {
+        id: 3,
+        statement_zh: "所有正方形皆是長方形。",
+        statement_en: "All squares are rectangles.",
+        answer: true,
+        type: "rect_rhombus_venn",
+        explanation_zh: "長方形的定義是「有4個直角且對邊平行的四邊形」。正方形有4個直角，符合長方形的所有條件，因此**所有正方形皆是長方形**。",
+        explanation_en: "A rectangle has 4 right angles and parallel opposite sides. A square meets all rectangle conditions, so **all squares are rectangles**."
+      },
+      {
+        id: 4,
+        statement_zh: "所有正方形皆是菱形。",
+        statement_en: "All squares are rhombuses.",
+        answer: true,
+        type: "rect_rhombus_venn",
+        explanation_zh: "菱形的定義是「4條邊長度皆相等且對邊平行的四邊形」。正方形的 4 條邊全部相等，因此**所有正方形皆是菱形**。",
+        explanation_en: "A rhombus requires 4 equal sides. A square satisfies this, so **all squares are rhombuses**."
+      },
+      {
+        id: 5,
+        statement_zh: "所有菱形皆是正方形。",
+        statement_en: "All rhombuses are squares.",
+        answer: false,
+        type: "rect_rhombus_venn",
+        explanation_zh: "菱形只要求「4條邊相等」，它的4個角不一定是直角。只有當菱形的內角變成直角時，它才是正方形。",
+        explanation_en: "A rhombus only requires 4 equal sides; its angles are not necessarily right angles."
+      },
+      {
+        id: 6,
+        statement_zh: "所有正方形既是長方形，又是菱形。",
+        statement_en: "All squares are both rectangles and rhombuses.",
+        answer: true,
+        type: "rect_rhombus_venn",
+        explanation_zh: "正方形既有4個直角（滿足長方形定義），又有4條相等邊（滿足菱形定義），因此**所有正方形既是長方形，又是菱形**，位於長方形與菱形的交集領域。",
+        explanation_en: "A square has 4 right angles (rectangle) and 4 equal sides (rhombus), so **all squares are both rectangles and rhombuses**."
+      },
+      {
+        id: 7,
+        statement_zh: "所有平行四邊形皆是正方形。",
+        statement_en: "All parallelograms are squares.",
+        answer: false,
+        type: "parallelogram_sub",
+        explanation_zh: "平行四邊形只需要「兩組對邊分別平行」。一般平行四邊形的角不一定是直角，4條邊也不一定相等。",
+        explanation_en: "General parallelograms do not necessarily have right angles or four equal sides."
+      },
+      {
+        id: 8,
+        statement_zh: "所有正方形、長方形和菱形皆是平行四邊形。",
+        statement_en: "All squares, rectangles, and rhombuses are parallelograms.",
+        answer: true,
+        type: "parallelogram_sub",
+        explanation_zh: "因為正方形、長方形和菱形都具備「兩組對邊分別平行」的特徵，所以**所有正方形、長方形和菱形皆是平行四邊形**。",
+        explanation_en: "Because squares, rectangles, and rhombuses all have two pairs of parallel opposite sides, **all of them are parallelograms**."
+      },
+      {
+        id: 9,
+        statement_zh: "平行四邊形既是長方形，又是菱形。",
+        statement_en: "A parallelogram is both a rectangle and a rhombus.",
+        answer: false,
+        type: "rect_rhombus_venn",
+        explanation_zh: "一般的平行四邊形不一定有直角（不一定是長方形），也不一定4邊相等（不一定是菱形）。",
+        explanation_en: "General parallelograms are neither required to have right angles nor four equal sides."
+      },
+      {
+        id: 10,
+        statement_zh: "梯形只有一組對邊平行。",
+        statement_en: "A trapezium has only one pair of opposite parallel sides.",
+        answer: true,
+        type: "trapezium_rule",
+        explanation_zh: "梯形的明確定義就是「**梯形只有一組對邊平行**」，另一組對邊不平行。",
+        explanation_en: "By definition, **a trapezium has only one pair of opposite parallel sides**."
+      },
+      {
+        id: 11,
+        statement_zh: "梯形是平行四邊形的一種。",
+        statement_en: "A trapezium is a type of parallelogram.",
+        answer: false,
+        type: "trapezium_rule",
+        explanation_zh: "平行四邊形有「兩組」對邊平行，而**梯形只有一組對邊平行**。兩者種類不同，梯形不是平行四邊形。",
+        explanation_en: "Parallelograms have two pairs of parallel sides, whereas a trapezium has only one pair."
+      }
+    ];
+
+    // 多語言字典
+    const i18n = {
+      zh: {
+        headerTitle: "四邊形的關係",
+        langBtn: "English",
+        homeSubtitle: "請選擇學習單元",
+        unit1Title: "單元一：是對是錯?",
+        descOpt1: "判斷有關正方形、長方形、菱形、平行四邊形及梯形等四邊形性質與包含關係的描述是否正確。",
+        qProgress: "題目",
+        questionLabel: "第 {n} 題",
+        ansLabel: "正確答案",
+        yourAnsLabel: "你的回答",
+        correctAnsLabel: "正確答案",
+        backBtn: "← 返回階段選擇",
+        nextBtn: "下一題 ➔",
+        labelTrue: "正確",
+        labelFalse: "不正確",
+        strTrue: "✓ 正確",
+        strFalse: "✗ 不正確",
+        stepTitle: "解題思路與分析：",
+        noWrong: "太厲害了！沒有答錯的題目！",
+        noCorrect: "無答對題目",
+        reportTitle: "練習完成！表現分析報告",
+        startTime: "開始時間：",
+        endTime: "完成時間：",
+        durationTime: "總用時：",
+        totalCorrect: "總答對題數：",
+        accuracy: "整體正確率：",
+        masteryTitle: "各主題掌握度分析",
+        unitMasteryName: "1. 四邊形的關係 (是對是錯?)",
+        correctTitle: "答對的題目",
+        wrongTitle: "答錯 / 需要協助的題目",
+        btnDownload: "💾 下載報告圖片",
+        btnRetry: "🔄 我想再試",
+        btnHome: "回到主頁重新選擇",
+        modalReturnTitle: "返回階段選擇",
+        modalReturnMsg: "確定要返回主選單嗎？目前的答題進度將不會被保存。",
+        modalCancel: "取消",
+        modalStart: "確定",
+        keyConceptsTitle: "💡 重點觀念整理：",
+        vennTitle: "【四邊形包含關係溫氏圖 (Venn Diagram)】",
+        // 圖形雙語標籤
+        vennRect: "長方形",
+        vennRhombus: "菱形",
+        vennSquare: "正方形",
+        vennParallelogram: "平行四邊形",
+        vennCombined: "正方形 / 長方形 / 菱形",
+        vennTrapezium: "梯形 (Trapezium)",
+        vennTrapeziumNote: "只有一組對邊平行 (紅線標示)",
+        // 觀念條目字典
+        concept1: "所有正方形皆是長方形",
+        concept2: "所有正方形皆是菱形",
+        concept3: "所有正方形既是長方形，又是菱形",
+        concept4: "所有正方形、長方形和菱形皆是平行四邊形",
+        concept5: "梯形只有一組對邊平行（不屬於平行四邊形）"
+      },
+      en: {
+        headerTitle: "Relationships of Quadrilaterals",
+        langBtn: "繁體中文",
+        homeSubtitle: "Please Select a Learning Unit",
+        unit1Title: "Unit 1: True or False?",
+        descOpt1: "Determine whether descriptions about properties and relationships of squares, rectangles, rhombuses, parallelograms, and trapeziums are true.",
+        qProgress: "Question",
+        questionLabel: "Q{n}",
+        ansLabel: "Correct Ans",
+        yourAnsLabel: "Your Ans",
+        correctAnsLabel: "Correct Ans",
+        backBtn: "← Back to Stage Selection",
+        nextBtn: "Next Question ➔",
+        labelTrue: "True",
+        labelFalse: "False",
+        strTrue: "✓ True",
+        strFalse: "✗ False",
+        stepTitle: "Analysis & Explanation:",
+        noWrong: "Amazing! No incorrect answers!",
+        noCorrect: "No correct questions",
+        reportTitle: "Practice Completed! Performance Report",
+        startTime: "Start Time:",
+        endTime: "Completion Time:",
+        durationTime: "Time Taken:",
+        totalCorrect: "Total Correct:",
+        accuracy: "Overall Accuracy:",
+        masteryTitle: "Topic Mastery Analysis",
+        unitMasteryName: "1. Relationships of Quadrilaterals (True or False?)",
+        correctTitle: "Correct Questions",
+        wrongTitle: "Incorrect / Needs Assistance",
+        btnDownload: "💾 Download Report Image",
+        btnRetry: "🔄 Try Again",
+        btnHome: "Back to Home",
+        modalReturnTitle: "Return to Stage Selection",
+        modalReturnMsg: "Are you sure you want to return to home? Current progress will be lost.",
+        modalCancel: "Cancel",
+        modalStart: "Confirm",
+        keyConceptsTitle: "💡 Key Concepts:",
+        vennTitle: "【Venn Diagram of Quadrilaterals】",
+        // 圖形雙語標籤
+        vennRect: "Rectangle",
+        vennRhombus: "Rhombus",
+        vennSquare: "Square",
+        vennParallelogram: "Parallelogram",
+        vennCombined: "Square / Rectangle / Rhombus",
+        vennTrapezium: "Trapezium",
+        vennTrapeziumNote: "Only one pair of opposite parallel sides (marked in red)",
+        // 觀念條目字典
+        concept1: "All squares are rectangles",
+        concept2: "All squares are rhombuses",
+        concept3: "All squares are both rectangles and rhombuses",
+        concept4: "All squares, rectangles, and rhombuses are parallelograms",
+        concept5: "A trapezium has only one pair of opposite parallel sides (not a parallelogram)"
+      }
+    };
+
+    let currentLang = 'zh';
+    let questions = [];
+    let currentQIndex = 0;
+    let records = [];
+    let startTimeObj = null;
+    let modalActionCallback = null;
+    let isAnsweredCurrent = false;
+
+    // SVG 溫氏圖生成函式（雙語支援）
+    function getVennSVG(type) {
+      const t = i18n[currentLang];
+      if (type === 'rect_rhombus_venn') {
+        return `
+          <svg class="venn-svg" viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg">
+            <!-- 長方形大橢圓 (藍) -->
+            <ellipse cx="200" cy="110" rx="170" ry="90" fill="#a0c4ff" fill-opacity="0.5" stroke="#3182ce" stroke-width="2"/>
+            <text x="120" y="55" font-size="16" font-weight="bold" fill="#1a365d">${t.vennRect}</text>
+            <!-- 長方形範例圖示 -->
+            <rect x="75" y="85" width="28" height="50" fill="#ecc94b" stroke="#333" stroke-width="1.5"/>
+            <polygon points="125,80 155,100 135,140 105,120" fill="#805ad5" stroke="#333" stroke-width="1.5"/>
+
+            <!-- 菱形大橢圓 (黃) -->
+            <ellipse cx="300" cy="110" rx="170" ry="90" fill="#fefcbf" fill-opacity="0.6" stroke="#d69e2e" stroke-width="2"/>
+            <text x="340" y="55" font-size="16" font-weight="bold" fill="#744210">${t.vennRhombus}</text>
+            <!-- 菱形範例圖示 -->
+            <polygon points="370,80 390,110 370,140 350,110" fill="#319795" stroke="#333" stroke-width="1.5"/>
+            <polygon points="435,95 465,110 435,125 405,110" fill="#e53e3e" stroke="#333" stroke-width="1.5"/>
+
+            <!-- 交集部分：正方形 (綠) -->
+            <text x="250" y="75" font-size="16" font-weight="bold" fill="#22543d" text-anchor="middle">${t.vennSquare}</text>
+            <rect x="215" y="90" width="34" height="34" fill="#dd6b20" stroke="#333" stroke-width="1.5"/>
+            <polygon points="268,88 288,108 268,128 248,108" fill="#d69e2e" stroke="#333" stroke-width="1.5"/>
+          </svg>
+        `;
+      } else if (type === 'parallelogram_sub') {
+        return `
+          <svg class="venn-svg" viewBox="0 0 500 210" xmlns="http://www.w3.org/2000/svg">
+            <!-- 外層：平行四邊形 (粉紅) -->
+            <ellipse cx="250" cy="105" rx="235" ry="95" fill="#fed7e2" fill-opacity="0.5" stroke="#b83280" stroke-width="2"/>
+            <text x="250" y="35" font-size="17" font-weight="bold" fill="#702459" text-anchor="middle">${t.vennParallelogram}</text>
+            
+            <!-- 一般平行四邊形圖示 -->
+            <polygon points="40,80 80,80 60,130 20,130" fill="#38a169" stroke="#333" stroke-width="1.5"/>
+            <polygon points="100,90 140,90 125,125 85,125" fill="#fbb6ce" stroke="#333" stroke-width="1.5"/>
+
+            <!-- 子集：正方形 / 長方形 / 菱形 集合 -->
+            <ellipse cx="320" cy="115" rx="140" ry="65" fill="#c6f6d5" fill-opacity="0.8" stroke="#2f855a" stroke-width="2"/>
+            <text x="320" y="75" font-size="15" font-weight="bold" fill="#22543d" text-anchor="middle">${t.vennCombined}</text>
+
+            <rect x="220" y="95" width="28" height="28" fill="#dd6b20" stroke="#333" stroke-width="1.5"/>
+            <rect x="270" y="90" width="22" height="38" fill="#ecc94b" stroke="#333" stroke-width="1.5"/>
+            <polygon points="340,90 358,110 340,130 322,110" fill="#319795" stroke="#333" stroke-width="1.5"/>
+            <polygon points="400,92 418,110 400,128 382,110" fill="#d69e2e" stroke="#333" stroke-width="1.5"/>
+          </svg>
+        `;
+      } else {
+        return `
+          <svg class="venn-svg" viewBox="0 0 500 130" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="10" width="480" height="110" rx="10" fill="#edf2f7" stroke="#cbd5e0" stroke-width="2"/>
+            <text x="250" y="35" font-size="16" font-weight="bold" fill="#2d3748" text-anchor="middle">${t.vennTrapezium}</text>
+            <polygon points="160,50 340,50 390,100 110,100" fill="#4299e1" fill-opacity="0.3" stroke="#2b6cb0" stroke-width="2"/>
+            <line x1="160" y1="50" x2="340" y2="50" stroke="#e53e3e" stroke-width="3"/>
+            <line x1="110" y1="100" x2="390" y2="100" stroke="#e53e3e" stroke-width="3"/>
+            <text x="250" y="80" font-size="14" font-weight="bold" fill="#c53030" text-anchor="middle">${t.vennTrapeziumNote}</text>
+          </svg>
+        `;
+      }
+    }
+
+    // 動態根據題目類型選擇要展示的重點觀念
+    function getRelevantConcepts(type) {
+      const t = i18n[currentLang];
+      if (type === 'rect_rhombus_venn') {
+        return [t.concept1, t.concept2, t.concept3];
+      } else if (type === 'parallelogram_sub') {
+        return [t.concept1, t.concept4];
+      } else if (type === 'trapezium_rule') {
+        return [t.concept5];
+      }
+      return [t.concept1, t.concept4, t.concept5];
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'zh' ? 'en' : 'zh';
+      const t = i18n[currentLang];
+      
+      document.getElementById('header-title').innerText = t.headerTitle;
+      document.getElementById('lang-toggle-btn').innerText = t.langBtn;
+      document.getElementById('home-subtitle').innerText = t.homeSubtitle;
+      document.getElementById('unit1-title').innerText = t.unit1Title;
+      document.getElementById('desc-opt1').innerText = t.descOpt1;
+      document.getElementById('lbl-back-btn').innerText = t.backBtn;
+      document.getElementById('label-true').innerText = t.labelTrue;
+      document.getElementById('label-false').innerText = t.labelFalse;
+
+      if (!document.getElementById('page-quiz').classList.contains('hidden')) {
+        loadQuestionUI();
+      }
+    }
+
+    function startQuiz(mode) {
+      // 隨機抽選 10 題（若不足則全部載入）
+      const shuffled = [...questionBank].sort(() => Math.random() - 0.5);
+      questions = shuffled.slice(0, 10);
+      currentQIndex = 0;
+      records = [];
+      startTimeObj = new Date();
+
+      document.getElementById('page-home').classList.add('hidden');
+      document.getElementById('page-report').classList.add('hidden');
+      document.getElementById('page-quiz').classList.remove('hidden');
+      document.getElementById('lang-toggle-btn').classList.add('hidden');
+
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      isAnsweredCurrent = false;
+      loadQuestionUI();
+    }
+
+    function loadQuestionUI() {
+      const t = i18n[currentLang];
+      const q = questions[currentQIndex];
+
+      document.getElementById('quiz-mode-name').innerText = t.unit1Title;
+      document.getElementById('quiz-progress-text').innerText = `${t.qProgress} ${currentQIndex + 1} / ${questions.length}`;
+      document.getElementById('statement-text').innerText = currentLang === 'zh' ? q.statement_zh : q.statement_en;
+
+      // 重置按鈕狀態
+      const btnTrue = document.getElementById('btn-choice-true');
+      const btnFalse = document.getElementById('btn-choice-false');
+
+      btnTrue.className = 'tf-btn';
+      btnFalse.className = 'tf-btn';
+      btnTrue.disabled = false;
+      btnFalse.disabled = false;
+
+      // 隱藏解題區與下一題按鈕
+      document.getElementById('solution-area').classList.add('hidden');
+      document.getElementById('solution-area').innerHTML = '';
+      document.getElementById('btn-next').classList.add('hidden');
+      document.getElementById('btn-next').innerText = t.nextBtn;
+    }
+
+    // 直接點擊「正確」或「不正確」提交答案
+    function handleDirectAnswer(userChoiceBool) {
+      if (isAnsweredCurrent) return;
+      isAnsweredCurrent = true;
+
+      const q = questions[currentQIndex];
+
+      const btnTrue = document.getElementById('btn-choice-true');
+      const btnFalse = document.getElementById('btn-choice-false');
+      const chosenBtn = userChoiceBool ? btnTrue : btnFalse;
+
+      // 禁用按鈕防止重複點擊
+      btnTrue.disabled = true;
+      btnFalse.disabled = true;
+
+      const isCorrect = (userChoiceBool === q.answer);
+
+      // 紀錄答題結果
+      records[currentQIndex] = {
+        qIndex: currentQIndex + 1,
+        questionObj: q,
+        targetAns: q.answer,
+        userChoice: userChoiceBool,
+        isCorrect: isCorrect
+      };
+
+      if (isCorrect) {
+        chosenBtn.classList.add('btn-correct');
+      } else {
+        chosenBtn.classList.add('btn-wrong', 'shake-anim');
+        setTimeout(() => {
+          chosenBtn.classList.remove('shake-anim');
+        }, 600);
+      }
+
+      // 展示題解與思路
+      showSolutionDetails(q, isCorrect);
+
+      // 顯示「下一題」按鈕
+      document.getElementById('btn-next').classList.remove('hidden');
+      document.getElementById('btn-next').focus();
+    }
+
+    function showSolutionDetails(q, isCorrect) {
+      const t = i18n[currentLang];
+      const solArea = document.getElementById('solution-area');
+      const expText = currentLang === 'zh' ? q.explanation_zh : q.explanation_en;
+
+      const vennSvgHtml = getVennSVG(q.type);
+      const relevantConcepts = getRelevantConcepts(q.type);
+      const conceptsListHtml = relevantConcepts.map(c => `<li>${c}</li>`).join('');
+
+      solArea.innerHTML = `
+        <div class="solution-card">
+          <div class="solution-header">
+            <span>${isCorrect ? '🎉 ' + (currentLang === 'zh' ? '答對了！' : 'Correct!') : '💡 ' + t.stepTitle}</span>
+          </div>
+
+          <div style="font-size: 1.05rem; line-height: 1.6; color:#2d3748; margin-bottom: 12px;">
+            ${expText}
+          </div>
+
+          <!-- 對應溫氏圖 (Venn Diagram) -->
+          <div class="venn-diagram-box">
+            <div class="venn-title">${t.vennTitle}</div>
+            ${vennSvgHtml}
+          </div>
+
+          <!-- 按題解需求動態展示重點觀念 -->
+          <div class="key-rules">
+            <strong>${t.keyConceptsTitle}</strong>
+            <ul class="solution-text-list">
+              ${conceptsListHtml}
+            </ul>
+          </div>
+        </div>
+      `;
+
+      solArea.classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+      currentQIndex++;
+      if (currentQIndex < questions.length) {
+        loadQuestion();
+      } else {
+        showReport();
+      }
+    }
+
+    function formatDate(d) {
+      const pad = (n) => n.toString().padStart(2, '0');
+      const dateStr = `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+      const timeStr = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+      return `${dateStr} ${timeStr}`;
+    }
+
+    function formatDuration(start, end) {
+      const diffInSeconds = Math.max(0, Math.floor((end - start) / 1000));
+      const mins = Math.floor(diffInSeconds / 60);
+      const secs = diffInSeconds % 60;
+
+      if (currentLang === 'en') {
+        if (mins > 0) return `${mins} min ${secs} sec`;
+        return `${secs} sec`;
+      } else {
+        if (mins > 0) return `${mins}分鐘${String(secs).padStart(2, '0')}秒`;
+        return `${secs}秒`;
+      }
+    }
+
+    function showReport() {
+      const endTimeObj = new Date();
+      const t = i18n[currentLang];
+
+      document.getElementById('page-quiz').classList.add('hidden');
+      document.getElementById('page-report').classList.remove('hidden');
+
+      document.getElementById('report-main-title').innerText = t.reportTitle;
+      document.getElementById('lbl-start-time').innerText = t.startTime;
+      document.getElementById('lbl-end-time').innerText = t.endTime;
+      document.getElementById('lbl-duration').innerText = t.durationTime;
+      document.getElementById('lbl-total-correct').innerText = t.totalCorrect;
+      document.getElementById('lbl-accuracy').innerText = t.accuracy;
+      document.getElementById('lbl-mastery-title').innerText = t.masteryTitle;
+      document.getElementById('lbl-correct-title').innerText = t.correctTitle;
+      document.getElementById('lbl-wrong-title').innerText = t.wrongTitle;
+
+      document.getElementById('lbl-btn-download').innerText = t.btnDownload;
+      document.getElementById('lbl-btn-retry').innerText = t.btnRetry;
+      document.getElementById('lbl-btn-home').innerText = t.btnHome;
+
+      document.getElementById('val-start-time').innerText = formatDate(startTimeObj);
+      document.getElementById('val-end-time').innerText = formatDate(endTimeObj);
+      document.getElementById('val-duration').innerText = formatDuration(startTimeObj, endTimeObj);
+
+      let correctCount = 0;
+      records.forEach(r => {
+        if (r && r.isCorrect) correctCount++;
+      });
+
+      const total = records.length;
+      const accuracyPct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+
+      document.getElementById('val-correct-count').innerText = `${correctCount} / ${total}`;
+      document.getElementById('val-accuracy').innerText = `${accuracyPct}%`;
+
+      document.getElementById('report-unit-name').innerText = t.unitMasteryName;
+      document.getElementById('val-unit-mastery').innerText = `${correctCount} / ${total} (${accuracyPct}%)`;
+
+      const correctContainer = document.getElementById('correct-list-container');
+      correctContainer.innerHTML = '';
+      const correctItems = records.filter(r => r && r.isCorrect);
+
+      if (correctItems.length === 0) {
+        correctContainer.innerHTML = `<div style="font-size:0.95rem; color:#718096; padding-left:5px;">${t.noCorrect}</div>`;
+      } else {
+        correctItems.forEach(item => {
+          const qText = t.questionLabel.replace('{n}', item.qIndex);
+          const qStmt = currentLang === 'zh' ? item.questionObj.statement_zh : item.questionObj.statement_en;
+          const targetText = item.targetAns ? t.strTrue : t.strFalse;
+          
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'item-card-correct';
+          itemDiv.innerHTML = `
+            <div class="item-q-title">${qText} : ${qStmt}</div>
+            <div class="item-ans-text">${t.ansLabel} : ${targetText}</div>
+          `;
+          correctContainer.appendChild(itemDiv);
+        });
+      }
+
+      const wrongContainer = document.getElementById('wrong-list-container');
+      wrongContainer.innerHTML = '';
+      const wrongItems = records.filter(r => r && !r.isCorrect);
+
+      if (wrongItems.length === 0) {
+        wrongContainer.innerHTML = `<div style="font-size:0.95rem; color:#38a169; padding-left:5px;">${t.noWrong}</div>`;
+      } else {
+        wrongItems.forEach(item => {
+          const qText = t.questionLabel.replace('{n}', item.qIndex);
+          const qStmt = currentLang === 'zh' ? item.questionObj.statement_zh : item.questionObj.statement_en;
+          const userDisplay = item.userChoice ? t.strTrue : t.strFalse;
+          const targetText = item.targetAns ? t.strTrue : t.strFalse;
+
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'item-card-wrong';
+          itemDiv.innerHTML = `
+            <div class="item-q-title">${qText} : ${qStmt}</div>
+            <div class="item-ans-text">${t.yourAnsLabel} : ${userDisplay} | ${t.correctAnsLabel} : ${targetText}</div>
+          `;
+          wrongContainer.appendChild(itemDiv);
+        });
+      }
+    }
+
+    function downloadReportImage() {
+      const element = document.getElementById('report-card-to-capture');
+      if (!element) return;
+
+      html2canvas(element, {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        useCORS: true
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `Quadrilaterals_Report_${new Date().toISOString().slice(0,10)}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }).catch(err => {
+        alert("下載失敗：" + err);
+      });
+    }
+
+    function openModal(title, msg, cancelTxt, confirmTxt, onConfirm) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-msg').innerText = msg;
+      document.getElementById('modal-cancel-btn').innerText = cancelTxt;
+      document.getElementById('modal-confirm-btn').innerText = confirmTxt;
+      modalActionCallback = onConfirm;
+      document.getElementById('custom-modal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('custom-modal').classList.remove('active');
+    }
+
+    function confirmModalAction() {
+      closeModal();
+      if (modalActionCallback) modalActionCallback();
+    }
+
+    function askReturnHome() {
+      const t = i18n[currentLang];
+      openModal(
+        t.modalReturnTitle,
+        t.modalReturnMsg,
+        t.modalCancel,
+        t.modalStart,
+        goHome
+      );
+    }
+
+    function retryPractice() {
+      startQuiz('unit1');
+    }
+
+    function goHome() {
+      document.getElementById('page-quiz').classList.add('hidden');
+      document.getElementById('page-report').classList.add('hidden');
+      document.getElementById('page-home').classList.remove('hidden');
+      document.getElementById('lang-toggle-btn').classList.remove('hidden');
+    }
+  </script>
+
+  <!-- iPad 虛擬鍵盤修復與觸控優化腳本 -->
+  <script src="https://mathteacher1618.github.io/my_fixes/ipad_fix.js"></script>
+</body>
+</html>
