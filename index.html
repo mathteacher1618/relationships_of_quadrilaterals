@@ -1016,6 +1016,9 @@
       if (isAnsweredCurrent) return;
       isAnsweredCurrent = true;
 
+      // 記錄當前頁面高度，防止答題後頁面自動向下滾動
+      const currentScrollY = window.scrollY;
+
       const q = questions[currentQIndex];
 
       const btnTrue = document.getElementById('btn-choice-true');
@@ -1049,9 +1052,14 @@
       // 展示題解與思路
       showSolutionDetails(q, isCorrect);
 
-      // 顯示「下一題」按鈕
+      // 顯示「下一題」按鈕（不呼叫 focus，避免瀏覽器強制捲動頁面）
       document.getElementById('btn-next').classList.remove('hidden');
-      document.getElementById('btn-next').focus();
+
+      // 確保畫面維持在學生答題時的高度位置
+      window.scrollTo({ top: currentScrollY, behavior: 'instant' });
+      setTimeout(() => {
+        window.scrollTo({ top: currentScrollY, behavior: 'instant' });
+      }, 0);
     }
 
     function showSolutionDetails(q, isCorrect) {
@@ -1096,8 +1104,10 @@
       currentQIndex++;
       if (currentQIndex < questions.length) {
         loadQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         showReport();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
 
